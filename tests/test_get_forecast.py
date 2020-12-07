@@ -21,7 +21,6 @@ class GetForecastTest(ForecastTest):
         json_response = json.loads(response.data)
         json_data = json_response['data']
 
-        self.assertIn('data', json_response)
         self.assertEqual(json_data['id'], None)
         self.assertEqual(json_data['type'], 'forecast')
 
@@ -35,9 +34,9 @@ class GetForecastTest(ForecastTest):
         assert_payload_type(self, forecast_attributes, 'hourly_weather', list)
         
         # 5 Days of daily weather
-        self.AssertEqual(len(forecast_attributes['daily_weather']), 5)
+        self.assertEqual(len(forecast_attributes['daily_weather']), 5)
         # 8 Hours of hourly weather
-        self.AssertEqual(len(forecast_attributes['hourly_weather']), 8)
+        self.assertEqual(len(forecast_attributes['hourly_weather']), 8)
 
         # Current Weather
         current_weather = forecast_attributes['current_weather']

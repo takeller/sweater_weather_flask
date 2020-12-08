@@ -29,7 +29,7 @@ class ForecastResource(Resource):
         current_forecast = forecast['current']
         timezone_offset = forecast['timezone_offset']
         
-        return { 
+        { 
             'datetime': self._time_converter(current_forecast['dt'], timezone_offset),
             'sunrise': self._time_converter(current_forecast['sunrise'], timezone_offset),
             'sunset': self._time_converter(current_forecast['sunset'], timezone_offset),

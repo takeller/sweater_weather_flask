@@ -21,7 +21,7 @@ class ForecastResource(Resource):
 
         return {
             "current_weather": self._format_current_weather(raw_forecast), 
-            "daily_weather": [],
+            "daily_weather": self._format_daily_weather(raw_forecast),
             "hourly_weather": []
         }
 
@@ -29,7 +29,7 @@ class ForecastResource(Resource):
         current_forecast = forecast['current']
         timezone_offset = forecast['timezone_offset']
         
-        { 
+        return { 
             'datetime': self._time_converter(current_forecast['dt'], timezone_offset),
             'sunrise': self._time_converter(current_forecast['sunrise'], timezone_offset),
             'sunset': self._time_converter(current_forecast['sunset'], timezone_offset),
@@ -41,6 +41,25 @@ class ForecastResource(Resource):
             'conditions': current_forecast['weather'][0]['description'],
             'icon': current_forecast['weather'][0]['icon']
         }
+
+    def _format_daily_weather(self, forecast): 
+        timezone_offset = forecast['timezone_offset']
+        daily_forecasts = forecast['daily'][0:6]
+
+        for i, daily_forecast in enumerate(daily_forecasts): 
+            formatted_forecast = { 
+            'date': self._time_converter(daily_forecast['dt'], timezone_offset),
+            'sunrise': self._time_converter(daily_forecast['sunrise'], timezone_offset),
+            'sunset': self._time_converter(daily_forecast['sunset'], timezone_offset),
+            'max_temp': daily_forecast['temp']['max'],
+            'min_temp': daily_forecast['temp']['min'],
+            'conditions': daily_forecast['weather'][0]['description'],
+            'icon': daily_forecast['weather'][0]['icon']
+            }
+            daily_forecasts[i] = formatted_forecast
+
+        return daily_forecasts
+
 
     def _location_to_coordinates(self, location): 
         geocode_service = GeocodeService()

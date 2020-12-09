@@ -66,6 +66,7 @@ class GetForecastTest(ForecastTest):
         
         # Hourly Weather
         hourly_weather = forecast_attributes['hourly_weather']
+        import pdb; pdb.set_trace()
         for hour in hourly_weather:
             assert_payload_type(self, hour, 'time', str)
             assert_payload_type(self, hour, 'wind_speed', str)

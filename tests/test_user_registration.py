@@ -42,8 +42,7 @@ class PostUserTest(UserTest):
         self.assertEqual(400, response.status_code)
 
         json_response = json.loads(response.data)
-        json_data = json_response['data']
-        self.assertEqual(json_data['error'], 'An account with this email address already exists')
+        self.assertEqual(json_response['error'], 'Key (email)=(taylor@gmail.com) already exists.')
 
         # Non-matching passwords
         json_payload = { 
@@ -56,5 +55,4 @@ class PostUserTest(UserTest):
         self.assertEqual(400, response.status_code)
 
         json_response = json.loads(response.data)
-        json_data = json_response['data']
-        self.assertEqual(json_data['error'], 'Password must match password confirmation')
+        self.assertEqual(json_response['error'], 'Password must match password confirmation.')

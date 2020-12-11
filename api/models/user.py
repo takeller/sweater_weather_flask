@@ -16,4 +16,10 @@ class User(db.Model):
         self.password = data.get('password')
         self.api_key = binascii.b2a_hex(os.urandom(16))
 
+    def save(self): 
+        db.session.add(self)
+        db.session.commit()
+
+    def __repr(self): 
+        return '<id {}'.format(self.id)
     

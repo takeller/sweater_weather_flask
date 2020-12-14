@@ -2,6 +2,7 @@ import json
 import unittest
 
 from random import randint
+from api.models import db
 from api import create_app 
 from . import assert_payload_type
 class UserTest(unittest.TestCase):
@@ -9,15 +10,20 @@ class UserTest(unittest.TestCase):
         self.app = create_app('testing')
         self.app_context = self.app.app_context
         self.client = self.app.test_client()
-    
-class PostUserTest(UserTest): 
-    def test_happypath_post_user(self):
-        json_payload = { 
-            'email': 'taylor' + str(randint(1,10000)) + '@gmail.com',
+
+        self.user_registration_payload = { 
+            'email': 'taylor@gmail.com',
             'password': 'password', 
             'password_confirmation': 'password'
         }
-        response = self.client.post('api/v1/users', json = json_payload, headers = {'Content-Type': 'application/json', 'Accept': 'application/json'})
+
+        with self.app.app_context():
+            db.drop_all()
+            db.create_all()
+    
+class PostUserTest(UserTest): 
+    def test_happypath_post_user(self):
+        response = self.client.post('api/v1/users', json = self.user_registration_payload, headers = {'Content-Type': 'application/json', 'Accept': 'application/json'})
 
         self.assertEqual(201, response.status_code)
 
@@ -32,12 +38,8 @@ class PostUserTest(UserTest):
 
     def test_sadpath_post_user(self): 
         # Duplicate email address
-        json_payload = { 
-            'email': 'taylor@gmail.com',
-            'password': 'password', 
-            'password_confirmation': 'password'
-        }
-        response = self.client.post('api/v1/users', json = json_payload, headers = {'Content-Type': 'application/json', 'Accept': 'application/json'})
+        response = self.client.post('api/v1/users', json = self.user_registration_payload, headers = {'Content-Type': 'application/json', 'Accept': 'application/json'})
+        response = self.client.post('api/v1/users', json = self.user_registration_payload, headers = {'Content-Type': 'application/json', 'Accept': 'application/json'})
 
         self.assertEqual(400, response.status_code)
 

@@ -9,7 +9,6 @@ class ForecastTest(unittest.TestCase):
     def setUp(self): 
         self.app = create_app('testing')
         self.app_context = self.app.app_context
-        # self.app_context.push()
         self.client = self.app.test_client()
 
 class GetForecastTest(ForecastTest):
@@ -35,8 +34,8 @@ class GetForecastTest(ForecastTest):
         
         # 5 Days of daily weather
         self.assertEqual(len(forecast_attributes['daily_weather']), 6)
+        
         # 8 Hours of hourly weather
-        # self.assertEqual(len(forecast_attributes['hourly_weather']), 8)
 
         # Current Weather
         current_weather = forecast_attributes['current_weather']
